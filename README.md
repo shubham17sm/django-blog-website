@@ -6,7 +6,7 @@ A fully functional blog website build using Django 2.1.5 + Python 3.6, database 
 
 # Features:
 * User has his own page to create, update and delete post.
-* [Django-TinyMCE](https://django-tinymce.readthedocs.io/en/latest/installation.html) based text edit to edit blog posts.
+* [Django-TinyMCE](https://django-tinymce.readthedocs.io/en/latest/installation.html) based text editor to edit and create blog posts.
 
 
 
