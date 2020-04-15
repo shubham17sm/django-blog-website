@@ -1,0 +1,113 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <!-- Latest Posts -->
+    <main class="posts-listing col-lg-8">
+      <div class="container">
+        <div class="row">
+          <!-- post -->
+          {% for latest in latest_blog_post%}
+          <div class="post col-xl-6">
+            <div class="post-thumbnail"><a href="{{ latest.get_absolute_url }}"><img src="{{ latest.thumbnail.url }}" alt="..."
+                  class="img-fluid"></a></div>
+            <div class="post-details">
+              <div class="post-meta d-flex justify-content-between">
+                <div class="date meta-last">{{ latest.timestamp | date }}</div>
+                <div class="category">
+                  {% for cat in latest.categories.all %}
+                  <a href="#">{{ cat }}</a>
+                  {% endfor %}
+                </div>
+              </div><a href="{{ latest.get_absolute_url }}">
+                <h3 class="h4">{{ latest.title }}</h3>
+              </a>
+              <p class="text-muted">{{ latest.overview }}</p>
+              <footer class="post-footer d-flex align-items-center"><a href="#"
+                  class="author d-flex align-items-center flex-wrap">
+                  <div class="avatar"><img src="{{ latest.author.profile_picture.url }}" alt="..." class="img-fluid">
+                  </div>
+                  <div class="title"><span>{{ latest.author }}</span></div>
+                </a>
+                <div class="date"><i class="icon-clock"></i>{{ latest.timestamp | timesince }} ago</div>
+                <div class="comments meta-last"><i class="icon-comment"></i>{{ latest.comment_count }}</div>
+              </footer>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+        <!-- Pagination -->
+        <nav aria-label="Page navigation example">
+          <ul class="pagination pagination-template d-flex justify-content-center">
+            {% if latest_blog_post.has_previous %}
+            <li class="page-item"><a href="?{{ page_request_var }}={{ latest_blog_post.pervious_page_number }}" class="page-link"> <i class="fa fa-angle-left"></i></a></li>
+            {% endif %}
+            <li class="page-item"><a href="?{{ page_request_var }}={{ latest_blog_post.number }}" class="page-link active">{{ latest_blog_post.number }}</a></li>
+            {% if latest_blog_post.has_next %}
+            <li class="page-item"><a href="?{{ page_request_var }}={{ latest_blog_post.next_page_number }}" class="page-link"> <i class="fa fa-angle-right"></i></a></li>
+            {% endif %}
+          </ul>
+        </nav>
+      </div>
+    </main>
+    <aside class="col-lg-4">
+      <!-- Widget [Search Bar Widget]-->
+      <div class="widget search">
+        <header>
+          <h3 class="h6">Search the blog</h3>
+        </header>
+        <form action="{% url 'search-result'%}" class="search-form">
+          <div class="form-group">
+            <input type="search" name="q" placeholder="What are you looking for?">
+            <button type="submit" class="submit"><i class="icon-search"></i></button>
+          </div>
+        </form>
+      </div>
+      <!-- Widget [Latest Posts Widget]-->
+      <div class="widget latest-posts">
+        <header>
+          <h3 class="h6">Latest Posts</h3>
+        </header>
+        <div class="blog-posts">
+          {% for sidebar in latest_sidebar_post %}
+          <a href="{{ sidebar.get_absolute.url }}">
+            <div class="item d-flex align-items-center">
+              <div class="image"><img src="{{ sidebar.thumbnail.url }}" alt="..." class="img-fluid"></div>
+              <div class="title"><strong>{{ sidebar.title }}</strong>
+                <div class="d-flex align-items-center">
+                  <div class="views"><i class="icon-eye"></i> 500</div>
+                  <div class="comments"><i class="icon-comment"></i>{{ sidebar.comment_count }}</div>
+                </div>
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+      </div>
+      <!-- Widget [Categories Widget]-->
+      <div class="widget categories">
+        <header>
+          <h3 class="h6">Categories</h3>
+        </header>
+        {% for cat in category_count %}
+        <div class="item d-flex justify-content-between"><a
+            href="#">{{ cat.categories__title }}</a><span>{{cat.categories__title__count}}</span></div>
+        {% endfor %}
+      </div>
+      <!-- Widget [Tags Cloud Widget]-->
+      <div class="widget tags">
+        <header>
+          <h3 class="h6">Tags</h3>
+        </header>
+        <ul class="list-inline">
+          {% for tag in tags_count %}
+          <li class="list-inline-item"><a href="#" class="tag">#{{ tag.tags__title }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock content %}
