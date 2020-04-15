@@ -24,3 +24,9 @@ First Create and start your virtual environment:
   python manage.py createsuperuser
   python manage.py runserver
 ```
+# Post Installation
+Go to the web browser and visit http://localhost:8000/home
+
+Admin username: admin
+
+Admin password: admin
