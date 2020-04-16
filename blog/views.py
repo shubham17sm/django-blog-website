@@ -2,10 +2,11 @@ from django.db.models import Count, Q
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 
 from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
-from .models import BlogPost, Subscribe, Author, Tags, Category
+from .models import BlogPost, Subscribe, Author, Tags, Category, PostPerView
 from .forms import PostForm, CommentForm
 from django.contrib import messages
 
+from django.contrib.admin.views.decorators import staff_member_required
 # Create your views here.
 
 def get_author(user):
@@ -92,6 +93,9 @@ def post(request, slug):
     post = get_object_or_404(BlogPost, slug=slug)
     latest_sidebar_post = BlogPost.objects.order_by('-timestamp')[0:3]
 
+    if request.user.is_authenticated:
+        PostPerView.objects.get_or_create(user=request.user, post=post)
+        
     form = CommentForm(request.POST or None)
     if request.method == "POST":
         if form.is_valid():
@@ -111,6 +115,7 @@ def post(request, slug):
     return render(request, "post.html", context)
 
 # create post view
+@staff_member_required
 def post_create(request):
     title = 'Create'
     form = PostForm(request.POST or None, request.FILES or None)
@@ -129,6 +134,7 @@ def post_create(request):
     return render(request, "post_create.html", context)
 
 # post update view
+@staff_member_required
 def post_update(request, slug):
     title = 'Update'
     post = get_object_or_404(BlogPost, slug=slug)
@@ -147,6 +153,8 @@ def post_update(request, slug):
     }
     return render(request, "post_create.html", context)
 
+#post delete view
+@staff_member_required
 def post_delete(request, slug):
     post = get_object_or_404(BlogPost, slug=slug)
     post.delete()

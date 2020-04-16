@@ -21,10 +21,12 @@
                     <a href="#">{{cat}}</a>
                     {% endfor %}
                   </div>
+                  {% if user.is_staff %}
                   <div>
                     <a href="{% url 'post-update' slug=post.slug %}">Update</a>
                     <a href="{% url 'post-delete' slug=post.slug %}">Delete</a>
                   </div>
+                  {% endif %}
                 </div>
                 <h1>{{ post.title }}<a href="#"><i class="fa fa-bookmark-o"></i></a></h1>
                 <div class="post-footer d-flex align-items-center flex-column flex-sm-row"><a href="#" class="author d-flex align-items-center flex-wrap">
@@ -32,7 +34,7 @@
                     <div class="title"><span>{{ post.author }}</span></div></a>
                   <div class="d-flex align-items-center flex-wrap">       
                     <div class="date"><i class="icon-clock"></i>{{ post.timestamp|timesince}} ago</div>
-                    <div class="views"><i class="icon-eye"></i> 500</div>
+                    <div class="views"><i class="icon-eye"></i>{{ post.view_count }}</div>
                     <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comment_count }}</div>
                   </div>
                 </div>
@@ -116,7 +118,7 @@
                   </form>
                 </div>
                 {% else %}
-                <a href="#" class="btn btn-primary">Login to comment</a>
+                <a href="{% url 'account_login' %}" class="btn btn-primary">Login to comment</a>
                 {% endif %}
               </div>
             </div>
@@ -147,7 +149,7 @@
               <div class="image"><img src="{{ sidebar.thumbnail.url }}" alt="..." class="img-fluid"></div>
               <div class="title"><strong>{{ sidebar.title }}</strong>
                 <div class="d-flex align-items-center">
-                  <div class="views"><i class="icon-eye"></i> 500</div>
+                  <div class="views"><i class="icon-eye"></i>{{ sidebar.view_count }}</div>
                   <div class="comments"><i class="icon-comment"></i>{{ sidebar.comment_count }}</div>
                 </div>
               </div>

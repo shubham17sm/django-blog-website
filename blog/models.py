@@ -8,6 +8,14 @@ from myproject.utils import unique_slug_generator
 
 User = get_user_model()
 
+class PostPerView(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    post = models.ForeignKey('BlogPost', on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+
 class Author(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     profile_picture = models.ImageField()
@@ -88,6 +96,11 @@ class BlogPost(models.Model):
     def comment_count(self):
         return Comment.objects.filter(post=self).count()
 
+    @property
+    def view_count(self):
+        return PostPerView.objects.filter(post=self).count()
+
+        
 
 def slug_generator(sender, instance, *args, **kwargs):
     if not instance.slug:

@@ -14,6 +14,7 @@ urlpatterns = [
     path('create/', views.post_create, name='post-create'),
     path('update/<slug:slug>/', views.post_update, name='post-update'),
     path('delete/<slug:slug>/', views.post_delete, name='post-delete'),
+    path('accounts/', include('allauth.urls')),
 ]
 
 if settings.DEBUG:
