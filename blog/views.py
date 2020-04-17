@@ -114,6 +114,24 @@ def post(request, slug):
     }
     return render(request, "post.html", context)
 
+# filter post by category view
+def post_by_categories(request, slug):
+    category_count = get_category_count()
+    tags_count = get_tags_count()
+    latest_sidebar_post = BlogPost.objects.order_by('-timestamp')[0:3]
+    #below are filter by category queries
+    category = get_object_or_404(Category, slug=slug)
+    blog = BlogPost.objects.filter(categories=category)
+    context = {
+        'category': category,
+        'blog': blog,
+        'latest_sidebar_post': latest_sidebar_post,
+        'category_count': category_count,
+        'tags_count': tags_count
+    }
+    return render(request, "post_by_cat.html", context)
+
+
 # create post view
 @staff_member_required
 def post_create(request):
@@ -159,3 +177,6 @@ def post_delete(request, slug):
     post = get_object_or_404(BlogPost, slug=slug)
     post.delete()
     return redirect(reverse('blog-view'))
+
+
+

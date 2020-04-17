@@ -1,0 +1,105 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <!-- Latest Posts -->
+    <main class="posts-listing col-lg-8">
+      <div class="container">
+          <div class="row title mb-5">
+              <h3>Category in: {{category.title}}</h3>
+          </div>
+        <div class="row">
+            
+          <!-- post -->
+          {% for post in blog%}
+          <div class="post col-xl-6">
+            <div class="post-thumbnail"><a href="{{ post.get_absolute_url }}"><img src="{{ post.thumbnail.url }}" alt="..."
+                  class="img-fluid"></a></div>
+            <div class="post-details">
+              <div class="post-meta d-flex justify-content-between">
+                <div class="date meta-last">{{ post.timestamp | date }}</div>
+                <!-- <div class="category">
+                  {% for cat in latest.categories.all %}
+                  <a href="#">{{ cat }}</a>
+                  {% endfor %}
+                </div> -->
+              </div><a href="{{ post.get_absolute_url }}">
+                <h3 class="h4">{{ post.title }}</h3>
+              </a>
+              <p class="text-muted">{{ post.overview }}</p>
+              <footer class="post-footer d-flex align-items-center"><a href="#"
+                  class="author d-flex align-items-center flex-wrap">
+                  <div class="avatar"><img src="{{ post.author.profile_picture.url }}" alt="..." class="img-fluid">
+                  </div>
+                  <div class="title"><span>{{ post.author }}</span></div>
+                </a>
+                <div class="date"><i class="icon-clock"></i>{{ post.timestamp | timesince }} ago</div>
+                <div class="comments meta-last"><i class="icon-comment"></i>{{ post.comment_count }}</div>
+              </footer>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+    <aside class="col-lg-4">
+        <!-- Widget [Search Bar Widget]-->
+        <div class="widget search">
+          <header>
+            <h3 class="h6">Search the blog</h3>
+          </header>
+          <form action="{% url 'search-result'%}" class="search-form">
+            <div class="form-group">
+              <input type="search" name="q" placeholder="What are you looking for?">
+              <button type="submit" class="submit"><i class="icon-search"></i></button>
+            </div>
+          </form>
+        </div>
+        <!-- Widget [Latest Posts Widget]-->
+        <div class="widget latest-posts">
+          <header>
+            <h3 class="h6">Latest Posts</h3>
+          </header>
+          <div class="blog-posts">
+            {% for sidebar in latest_sidebar_post %}
+            <a href="{{ sidebar.get_absolute.url }}">
+              <div class="item d-flex align-items-center">
+                <div class="image"><img src="{{ sidebar.thumbnail.url }}" alt="..." class="img-fluid"></div>
+                <div class="title"><strong>{{ sidebar.title }}</strong>
+                  <div class="d-flex align-items-center">
+                    <div class="views"><i class="icon-eye"></i> {{ sidebar.view_count }}</div>
+                    <div class="comments"><i class="icon-comment"></i>{{ sidebar.comment_count }}</div>
+                  </div>
+                </div>
+              </div>
+            </a>
+            {% endfor %}
+          </div>
+        </div>
+        <!-- Widget [Categories Widget]-->
+        <div class="widget categories">
+          <header>
+            <h3 class="h6">More categories</h3>
+          </header>
+          {% for cat in category_count %}
+          <div class="item d-flex justify-content-between">
+            <a href="#">{{ cat.categories__title }}</a><span>{{cat.categories__title__count}}</span></div>
+          {% endfor %}
+        </div>
+        <!-- Widget [Tags Cloud Widget]-->
+        <div class="widget tags">
+          <header>
+            <h3 class="h6">Tags</h3>
+          </header>
+          <ul class="list-inline">
+            {% for tag in tags_count %}
+            <li class="list-inline-item"><a href="#" class="tag">#{{ tag.tags__title }}</a></li>
+            {% endfor %}
+          </ul>
+        </div>
+      </aside>
+  </div>
+</div>
+{% endblock content %}

@@ -15,6 +15,7 @@ urlpatterns = [
     path('update/<slug:slug>/', views.post_update, name='post-update'),
     path('delete/<slug:slug>/', views.post_delete, name='post-delete'),
     path('accounts/', include('allauth.urls')),
+    path('cat/<slug:slug>/', views.post_by_categories, name='post-by-category')
 ]
 
 if settings.DEBUG:

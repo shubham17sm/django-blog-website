@@ -26,6 +26,13 @@ class Author(models.Model):
 
 class Category(models.Model):
     title = models.CharField(max_length=40)
+    slug = models.SlugField(max_length=40, null=True, blank=True)
+
+    def get_absolute_url(self):
+        return reverse('post-by-category', kwargs={
+            'slug': self.slug
+        })
+
 
     def __str__(self):
         return self.title
