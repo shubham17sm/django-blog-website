@@ -7,6 +7,9 @@ from .forms import PostForm, CommentForm
 from django.contrib import messages
 
 from django.contrib.admin.views.decorators import staff_member_required
+
+from django.http import HttpResponse, HttpResponseRedirect
+
 # Create your views here.
 
 def get_author(user):
@@ -95,6 +98,10 @@ def post(request, slug):
 
     if request.user.is_authenticated:
         PostPerView.objects.get_or_create(user=request.user, post=post)
+
+    is_liked = False
+    if post.likes.filter(id=request.user.id).exists():
+        is_liked = True
         
     form = CommentForm(request.POST or None)
     if request.method == "POST":
@@ -111,8 +118,25 @@ def post(request, slug):
         'latest_sidebar_post': latest_sidebar_post,
         'category_count': category_count,
         'tags_count': tags_count,
+        'is_liked': is_liked,
+        'total_likes': post.total_likes(),
     }
     return render(request, "post.html", context)
+
+
+# post like view
+def like_post(request):
+    post = get_object_or_404(BlogPost, id=request.POST.get('blogpost_id'))
+    is_liked = False
+    if post.likes.filter(id=request.user.id).exists():
+        post.likes.remove(request.user)
+        is_liked = False
+    else: 
+        post.likes.add(request.user)
+        is_liked = True
+    return HttpResponseRedirect(post.get_absolute_url())
+
+
 
 # filter post by category view
 def post_by_categories(request, slug):
@@ -177,6 +201,4 @@ def post_delete(request, slug):
     post = get_object_or_404(BlogPost, slug=slug)
     post.delete()
     return redirect(reverse('blog-view'))
-
-
 

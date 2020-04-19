@@ -4,6 +4,7 @@ from tinymce import HTMLField
 from django.urls import reverse 
 from django.db.models.signals import pre_save
 from myproject.utils import unique_slug_generator
+
 # Create your models here.
 
 User = get_user_model()
@@ -85,23 +86,31 @@ class BlogPost(models.Model):
                                                       default ='draft') 
     previous_post = models.ForeignKey('self', related_name='previous', on_delete=models.SET_NULL, blank=True, null=True)
     next_post = models.ForeignKey('self', related_name='next', on_delete=models.SET_NULL, blank=True, null=True)
-
+    likes = models.ManyToManyField(User, related_name='likes', blank=True)
 
     def __str__(self):
         return self.title
+
 
     def get_absolute_url(self):
         return reverse('post-view', kwargs={
             'slug': self.slug
         })
 
+
+    def total_likes(self):
+        return self.likes.count()
+
+
     @property
     def get_comments(self):
         return self.comments.all().order_by('-timestamp')
 
+
     @property
     def comment_count(self):
         return Comment.objects.filter(post=self).count()
+
 
     @property
     def view_count(self):
