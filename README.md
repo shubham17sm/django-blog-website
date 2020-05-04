@@ -22,7 +22,7 @@ You can use free Bootstrap template by [Bootstrapious](https://bootstrapious.com
 
 First Create and start your virtual environment:
 ```
-  pip install -r requirements.txt
+  pip install -r requirement.txt
   python manage.py makemigrations
   python manage.py migrate
   python manage.py createsuperuser
