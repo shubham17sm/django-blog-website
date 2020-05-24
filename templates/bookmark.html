@@ -1,0 +1,51 @@
+{% extends 'base.html'%}
+{% load static %}
+
+{% block content %}
+<div class="container">
+  <div class="row">
+    <!-- Latest Posts -->
+    <main class="posts-listing col-lg-12">
+      <div class="container">
+          <div class="row title mb-5">
+              <h3>Bookmarked Post</h3>
+          </div>
+        <div class="row">
+            
+          <!-- post -->
+          {% for post in bookmark.posts.all %}
+          <div class="post col-xl-6">
+            <div class="post-thumbnail"><a href="{{ post.posts.get_absolute_url }}"><img src="{{ post.posts.thumbnail.url }}" alt="..."
+                  class="img-fluid"></a></div>
+            <div class="post-details">
+              <div class="post-meta d-flex justify-content-between">
+                <div class="date meta-last">{{ post.posts.timestamp | date }}</div>
+                <!-- <div class="category">
+                  {% for cat in latest.categories.all %}
+                  <a href="#">{{ cat }}</a>
+                  {% endfor %}
+                </div> -->
+              </div><a href="{{ post.posts.get_absolute_url }}">
+                <h3 class="h4">{{ post.posts.title }}</h3>
+              </a>
+              <a href="#" style="float: right; color: black;" class="mr-3"><i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+              </a>
+              <p class="text-muted">{{ post.posts.overview }}</p>
+              <footer class="post-footer d-flex align-items-center"><a href="#"
+                  class="author d-flex align-items-center flex-wrap">
+                  <div class="avatar"><img src="{{ post.posts.author.profile_picture.url }}" alt="author profile picture" class="img-fluid">
+                  </div>
+                  <div class="title"><span>{{ post.posts.author }}</span></div>
+                </a>
+                <div class="date"><i class="icon-clock"></i>{{ post.posts.timestamp | timesince }} ago</div>
+                <div class="comments meta-last"><i class="icon-comment"></i>{{ post.posts.comment_count }}</div>
+              </footer>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </main>
+  </div>
+</div>
+{% endblock content %}

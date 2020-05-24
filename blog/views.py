@@ -1,5 +1,8 @@
 from django.db.models import Count, Q
 from django.shortcuts import render, get_object_or_404, redirect, reverse
+from django.contrib.auth.mixins import LoginRequiredMixin
+from django.core.exceptions import ObjectDoesNotExist
+from django.views.generic import View
 
 from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
 from .models import BlogPost, Subscribe, Author, Tags, Category, PostPerView, Bookmark, BookmarkPost
@@ -138,6 +141,19 @@ def like_post(request):
         post.likes.add(request.user)
         is_liked = True
     return HttpResponseRedirect(post.get_absolute_url())
+
+
+class BookmarkView(LoginRequiredMixin, View):
+    def get(self, *args, **kwargs):
+        try:
+            bookmark_qs = Bookmark.objects.get(user=self.request.user, bookmarked=False)
+            context = {
+                'bookmark': bookmark_qs
+            }
+            return render(self.request, 'bookmark.html', context)
+        except ObjectDoesNotExist: 
+            messages.error(self.request, "You have not added anything in wishlist yet")
+            return redirect('/')
 
 
 
