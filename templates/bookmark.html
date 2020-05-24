@@ -28,7 +28,7 @@
               </div><a href="{{ post.posts.get_absolute_url }}">
                 <h3 class="h4">{{ post.posts.title }}</h3>
               </a>
-              <a href="#" style="float: right; color: black;" class="mr-3"><i class="fa fa-trash fa-2x" aria-hidden="true"></i>
+              <a href="{{ post.posts.get_remove_from_bookmark_url }}" style="float: right; color: black;" class="mr-3"><i class="fa fa-trash fa-2x" aria-hidden="true"></i>
               </a>
               <p class="text-muted">{{ post.posts.overview }}</p>
               <footer class="post-footer d-flex align-items-center"><a href="#"

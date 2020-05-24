@@ -101,6 +101,11 @@ class BlogPost(models.Model):
         return reverse('add-to-bookmark', kwargs={
             'slug': self.slug
         })
+    
+    def get_remove_from_bookmark_url(self):
+        return reverse('remove-from-bookmark', kwargs={
+            'slug': self.slug
+        })
 
     def total_likes(self):
         return self.likes.count()

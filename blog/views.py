@@ -231,7 +231,7 @@ def add_to_bookmark(request, slug):
         bookmark = bookmark_qs[0]
         if bookmark.posts.filter(posts__slug=posts.slug).exists():
             bookmark_posts.save()
-            messages.success(request, "This post is bookmarked")
+            messages.warning(request, "This post is already bookmarked")
         else:
             messages.success(request, "This post is bookmarked")
             bookmark.posts.add(bookmark_posts)
@@ -244,3 +244,30 @@ def add_to_bookmark(request, slug):
         return redirect('post-view', slug=slug)
     return redirect('post-view', slug=slug)
 
+
+@login_required
+def remove_from_bookmark(request, slug):
+    posts = get_object_or_404(BlogPost, slug=slug)
+    bookmark_qs = Bookmark.objects.filter(
+        user=request.user, 
+        bookmarked=False
+    )
+    if bookmark_qs.exists():
+        bookmark = bookmark_qs[0]
+        #check if the order item is in the order
+        if bookmark.posts.filter(posts__slug=posts.slug).exists():
+            bookmark_posts = BookmarkPost.objects.filter(
+                posts=posts, 
+                user=request.user, 
+                bookmarked=False
+            )[0]
+            bookmark.posts.remove(bookmark_posts)
+            messages.info(request, "Removed from your Bookmark.")
+            return redirect('bookmark')
+        else:
+            messages.info(request, "This item was not in your Bookmark.")
+            return redirect('bookmark') 
+    else:
+        #add a message saying the user doesnt have an order
+        messages.info(request, "You do not have anything in bookmark.")
+        return redirect('bookmark')
