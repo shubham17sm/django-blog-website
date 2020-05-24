@@ -17,7 +17,7 @@ urlpatterns = [
     path('accounts/', include('allauth.urls')),
     path('cat/<slug:slug>/', views.post_by_categories, name='post-by-category'),
     path('like/', views.like_post, name='like-post'),
-
+    path('add-to-bookmark/<slug>/', views.add_to_bookmark, name='add-to-bookmark'),
 ]
 
 if settings.DEBUG:

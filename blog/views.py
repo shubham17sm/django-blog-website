@@ -2,11 +2,14 @@ from django.db.models import Count, Q
 from django.shortcuts import render, get_object_or_404, redirect, reverse
 
 from django.core.paginator import Paginator , EmptyPage, PageNotAnInteger
-from .models import BlogPost, Subscribe, Author, Tags, Category, PostPerView
+from .models import BlogPost, Subscribe, Author, Tags, Category, PostPerView, Bookmark, BookmarkPost
 from .forms import PostForm, CommentForm
 from django.contrib import messages
 
+from django.utils import timezone
+
 from django.contrib.admin.views.decorators import staff_member_required
+from django.contrib.auth.decorators import login_required
 
 from django.http import HttpResponse, HttpResponseRedirect
 
@@ -201,4 +204,27 @@ def post_delete(request, slug):
     post = get_object_or_404(BlogPost, slug=slug)
     post.delete()
     return redirect(reverse('blog-view'))
+
+# add to bookmark
+@login_required
+def add_to_bookmark(request, slug):
+    posts = get_object_or_404(BlogPost, slug=slug)
+    bookmark_posts, created = BookmarkPost.objects.get_or_create(posts=posts, user=request.user)
+    bookmark_qs = Bookmark.objects.filter(user=request.user, bookmarked=False)
+    if bookmark_qs.exists():
+        bookmark = bookmark_qs[0]
+        if bookmark.posts.filter(posts__slug=posts.slug).exists():
+            bookmark_posts.save()
+            messages.success(request, "This post is bookmarked")
+        else:
+            messages.success(request, "This post is bookmarked")
+            bookmark.posts.add(bookmark_posts)
+            return redirect('post-view', slug=slug)
+    else:
+        bookmarked_date = timezone.now()
+        bookmark = Bookmark.objects.create(user=request.user, bookmarked_date=bookmarked_date)
+        bookmark.posts.add(bookmark_posts)
+        messages.success(request, "This post is bookmarked")
+        return redirect('post-view', slug=slug)
+    return redirect('post-view', slug=slug)
 

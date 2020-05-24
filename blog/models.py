@@ -97,6 +97,10 @@ class BlogPost(models.Model):
             'slug': self.slug
         })
 
+    def get_add_to_bookmark_url(self):
+        return reverse('add-to-bookmark', kwargs={
+            'slug': self.slug
+        })
 
     def total_likes(self):
         return self.likes.count()
@@ -124,3 +128,23 @@ def slug_generator(sender, instance, *args, **kwargs):
 
 
 pre_save.connect(slug_generator, sender=BlogPost)
+
+#bookmark model
+class BookmarkPost(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    posts = models.ForeignKey(BlogPost, on_delete=models.CASCADE, blank=True, null=True)
+    bookmarked = models.BooleanField(default=False)
+
+    def __str__(self):
+        return f"{self.posts.title}"
+
+
+class Bookmark(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    posts = models.ManyToManyField(BookmarkPost)
+    bookmarked = models.BooleanField(default=False)
+    bookmarked_date = models.DateTimeField(auto_now_add=False)
+
+    def __str__(self):
+        return self.user.username
+

@@ -47,7 +47,11 @@
             <a class="nav-link dropdown-toggle" data-toggle="dropdown">Profile<span class="caret"></span></a>
             <ul class="dropdown-menu" role="menu">
               <li class="nav-item"><a href="#" class="nav-link "><i class="fa fa-user" aria-hidden="true"></i>
-                  | {{request.user.username}}</a>
+                  | {{request.user.username}}</a></li>
+              <li class="nav-item"><a href="#" class="nav-link ">
+                  <i class="fa fa-bookmark" aria-hidden="true">
+                  </i> Bookmark</a>
+              </li>
               <li class="nav-item"><a href="{% url 'account_logout'%}" class="nav-link ">
                   <i class="fa fa-sign-out" aria-hidden="true">
                   </i> logout</a>

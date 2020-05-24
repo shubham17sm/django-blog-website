@@ -28,7 +28,7 @@
               </div>
               {% endif %}
             </div>
-            <h1>{{ post.title }}<a href="#"><i class="fa fa-bookmark-o"></i></a></h1>
+            <h1>{{ post.title }}<a href="{{ post.get_add_to_bookmark_url }}"><i class="fa fa-bookmark-o"></i></a></h1>
             <div class="like-button float-right">
               {% if request.user.is_authenticated %}
               <form action="{% url 'like-post' %}" method="POST">{% csrf_token %}
