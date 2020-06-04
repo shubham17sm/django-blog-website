@@ -29,11 +29,6 @@ class Category(models.Model):
     title = models.CharField(max_length=40)
     slug = models.SlugField(max_length=40, null=True, blank=True)
 
-    def get_absolute_url(self):
-        return reverse('post-by-category', kwargs={
-            'slug': self.slug
-        })
-
 
     def __str__(self):
         return self.title
@@ -106,6 +101,13 @@ class BlogPost(models.Model):
         return reverse('remove-from-bookmark', kwargs={
             'slug': self.slug
         })
+
+
+    def get_category_url(self):
+        return reverse('post-by-category', kwargs={
+            'slug': self.slug
+        })
+
 
     def total_likes(self):
         return self.likes.count()

@@ -41,7 +41,7 @@ def search(request):
 
 
 def get_category_count():
-    qs = BlogPost.objects.values('categories__title').annotate(Count('categories__title'))
+    qs = BlogPost.objects.values('categories__title', 'categories__slug').annotate(Count('categories__title'))
     return qs 
 
 

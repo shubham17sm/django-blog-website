@@ -64,7 +64,7 @@
           </header>
           <div class="blog-posts">
             {% for sidebar in latest_sidebar_post %}
-            <a href="{{ sidebar.get_absolute.url }}">
+            <a href="/post/{{ sidebar.slug }}">
               <div class="item d-flex align-items-center">
                 <div class="image"><img src="{{ sidebar.thumbnail.url }}" alt="..." class="img-fluid"></div>
                 <div class="title"><strong>{{ sidebar.title }}</strong>
@@ -85,7 +85,7 @@
           </header>
           {% for cat in category_count %}
           <div class="item d-flex justify-content-between">
-            <a href="#">{{ cat.categories__title }}</a><span>{{cat.categories__title__count}}</span></div>
+            <a href="/cat/{{ cat.categories__slug}}">{{ cat.categories__title }}</a><span>{{cat.categories__title__count}}</span></div>
           {% endfor %}
         </div>
         <!-- Widget [Tags Cloud Widget]-->
